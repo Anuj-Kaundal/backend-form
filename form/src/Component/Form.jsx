@@ -22,6 +22,8 @@ function Form() {
   const [editId, setEditId] = useState(null);
   console.log('edit Id : ', editId)
   const [error, setError] = useState('');
+  const [user, setUser] = useState(false);
+  const [userData, setUserData] = useState({}); // to store user data after login
   console.log(formData); // just to check its print or not
 
   const handleclick = (e) => {
@@ -80,16 +82,46 @@ function Form() {
     return setSuccess('Form Submitted', res)
   }
 
+
+  
+
+  // login
   const UserLogin= async (e)=>{
     e.preventDefault();
     try{
-      const res = await axios.post()
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND}/login`,{
+        email: loginData.email,
+        password: loginData.password
+      });
+      console.log('login : ', res.data);
+      //  setItem , getItem , removeItem 
+      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('user', JSON.stringify(res.data.user))
+
 
 
     }catch(err){
       console.log('err : ', err.message)
     }
   }
+
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+    if(token){
+      setUser(true);
+      const userId = JSON.parse(localStorage.getItem('user'))._id;
+      console.log('userId : ', userId);
+      const getUser = async()=>{
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND}/find/${userId}`);
+        console.log('get user : ', res.data);
+        setUserData(res.data)
+      }
+      getUser();
+
+    }
+  },[])
+
 
 
   const userUpdate = async ({ e, user }) => {
@@ -217,7 +249,7 @@ function Form() {
                   <td className="p-4">{user.email}</td>
                   <td className="p-4">{user.phone}</td>
                   <td className="p-4">
-                    {user.password}
+                    {user.hashedpassword}
                   </td>
                   <td className="p-4 text-red-500 font-bold cursor-pointer" onClick={() => deleteUser(user._id)}  >Delete</td>
                   <td className="p-4 text-red-500 font-bold cursor-pointer " onClick={(e) => userUpdate({ e, user })}>Update</td>
@@ -272,6 +304,25 @@ function Form() {
 
         </form>
       </div>
+
+      {
+        user && (
+          <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-400 to-blue-500">
+            <div className="bg-white p-8 rounded-xl shadow-lg w-80 text-center">
+              {
+                userData && (
+                  <>
+                  {userData.fullname}
+                  {userData.email} <br />
+                  
+                  { userData.phone}
+                  </>
+                )
+              }
+            </div>
+
+            </div>)
+      }
 
     </>
   )

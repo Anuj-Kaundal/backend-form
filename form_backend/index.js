@@ -27,7 +27,8 @@ app.post('/post', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await userdata.findOne({ email });
+    const user = await userdata.findOne({ email }).select('+password');
+
     console.log(user)
     if (!user) {
         return res.send('User is not found')
@@ -40,7 +41,7 @@ app.post('/login', async (req, res) => {
             var token =  jwt.sign(
                 { token: user.email }, 'shhhhh'
             )
-            res.status(200).json({ message: 'login successfully', success: true , token})
+            res.status(200).json({ message: 'login successfully', success: true , token,user});
         } else {
             res.status(500).json({ message: 'getting error whle login,', success: false })
         }
@@ -76,7 +77,15 @@ app.delete('/delete/:id', async (req, res) => {
     const data = await userdata.findByIdAndDelete({ _id: id })
     console.log('true');
     res.status(200).json({ message: 'user deleted successfully', success: true })
-})
+});
+
+
+app.get('/find/:id',async(req,res)=>{    // route, middelware, logic
+     const {id} = req.params;
+     const find_user = await userdata.findOne({_id:id});
+     console.log(find_user,'data');
+     res.send(find_user,'data-user');
+});
 app.listen(2000, () => {
     console.log('server is running...');
 })
