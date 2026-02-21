@@ -56,7 +56,7 @@ function Form() {
 
     e.preventDefault(); // is used to reload the page after submit the data.
     setLoading(true)
-    if (formData.password != formData.confirm_password) { // check both password and confirm_password are smae or not
+    if (formData.password != formData.confirm_password) { // check both password and confirm_password are same or not
       return setError('password not same');
     }
     console.log('trigger api for submitting form application');
