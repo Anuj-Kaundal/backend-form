@@ -3,6 +3,7 @@ const userdata = require('./model/user_data');
 const cors = require('cors');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const AuthenticateToken = require('./auth');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -50,11 +51,12 @@ app.post('/login', async (req, res) => {
 
 
 
-})
-app.get('/getdata', async (req, res) => {
+});
+
+app.get('/getdata',AuthenticateToken, async (req, res) => {
     const getdata = await userdata.find().select('-password');
     console.log(getdata, 'all data');
-    res.send(getdata, 'all data');
+    res.json(getdata);
 });
 app.put('/update/:id', async (req, res) => {
     const { id } = req.params;
