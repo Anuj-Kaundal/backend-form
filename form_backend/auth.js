@@ -12,7 +12,7 @@ function AuthenticateToken(req, res, next) {
         return res.status(401).json({ message: "Invalid token format." });
     }
 
-    jwt.verify(token, 'shhhhh', (err, user) => {
+    jwt.verify(token,'shhhhh', (err, user) => {
         if (err) {
             return res.status(403).json({ message: "Invalid or Expired Token." });
         }
