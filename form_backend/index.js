@@ -8,7 +8,6 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors('http://localhost:5173/'));
-
 app.post('/post', async (req, res) => {
     const { fullname, email, phone, password } = req.body;
     console.log(fullname, email, phone, password);
@@ -53,11 +52,11 @@ app.post('/login', async (req, res) => {
 
 });
 
-app.get('/getdata',AuthenticateToken, async (req, res) => {
-    const getdata = await userdata.find().select('-password');
-    console.log(getdata, 'all data');
-    res.json(getdata);
-});
+// app.get('/getdata',AuthenticateToken, async (req, res) => {
+//     const getdata = await userdata.find().select('-password');
+//     console.log(getdata, 'all data');
+//     res.json(getdata);
+// });
 app.put('/update/:id', async (req, res) => {
     const { id } = req.params;
     const { fullname, email, phone, password } = req.body;
