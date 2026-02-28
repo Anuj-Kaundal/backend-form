@@ -8,6 +8,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors('http://localhost:5173/'));
+const userRoute = require('./route/userRoute')
+app.use('/api',userRoute);
 app.post('/post', async (req, res) => {
     const { fullname, email, phone, password } = req.body;
     console.log(fullname, email, phone, password);
