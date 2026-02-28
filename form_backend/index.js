@@ -48,10 +48,6 @@ app.post('/login', async (req, res) => {
             res.status(500).json({ message: 'getting error whle login,', success: false })
         }
     })
-
-
-
-
 });
 
 // app.get('/getdata',AuthenticateToken, async (req, res) => {
